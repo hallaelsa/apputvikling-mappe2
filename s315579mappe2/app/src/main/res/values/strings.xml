@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">s315579mappe2</string>
+    <string name="regResBtn">Restaurant overview</string>
+    <string name="regFriendsBtn">Friends overview</string>
+    <string name="resMenuText">My Restaurants</string>
+    <string name="friendsMenuText">My Friends</string>
+    <string name="ordersMenuText">My Orders</string>
+    <string name="ResHeader">Add Restaurant</string>
+    <string name="FriHeader">Add Friend</string>
+    <string name="OrdHeader">Add Order</string>
+    <string name="nameLabel">Name</string>
+    <string name="addressLabel">Address</string>
+    <string name="phoneLabel">Phone number</string>
+    <string name="typeLabel">Type</string>
+    <string name="addBtnLabel">Add</string>
+    <string name="updateBtnLabel">Update</string>
+    <string name="deleteBtnLabel">Delete</string>
+</resources>
