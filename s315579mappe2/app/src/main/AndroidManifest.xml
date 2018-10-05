@@ -17,15 +17,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Restaurants.Add_Restaurant_Activity"
-            android:parentActivityName=".MainActivity" />
-        <activity
             android:name=".Orders.Add_Order_Activity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".Friends.Add_Friend_Activity"
+            android:name=".FriendInput"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".ItemInputActivity"></activity>
+        <activity android:name=".RestaurantInput"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

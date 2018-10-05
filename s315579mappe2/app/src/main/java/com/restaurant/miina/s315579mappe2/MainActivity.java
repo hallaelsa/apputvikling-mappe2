@@ -9,14 +9,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.restaurant.miina.s315579mappe2.Orders.Add_Order_Activity;
-import com.restaurant.miina.s315579mappe2.Restaurants.Add_Restaurant_Activity;
 
 // TODO! Se om det er en bedre å oppdatere fragmentet på. Kanskje via updatemetoden.
 public class MainActivity extends AppCompatActivity {
@@ -25,9 +23,9 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fabOrder;
     FloatingActionButton fabRestaurant;
     FloatingActionButton fabMinus;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
     CustomFragment fragment;
+    final int FRIEND_REQUEST_CODE = 10002;
+    final int RESTAURANT_REQUEST_CODE = 20002;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +42,8 @@ public class MainActivity extends AppCompatActivity {
         fabOrder = (FloatingActionButton)findViewById(R.id.fabOrder);
         fabRestaurant = (FloatingActionButton)findViewById(R.id.fabRestaurant);
         fabMinus = (FloatingActionButton)findViewById(R.id.fabMinus);
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,14 +57,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragment = new CustomFragment();
+
         switch (item.getItemId()) {
             case R.id.resmenu:
-                fragment.setTarget("RESTAURANT");
+                fragment = new RestaurantFragment();
                 fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
                 break;
             case R.id.friedsmenu:
-                fragment.setTarget("FRIEND");
+                fragment = new FriendFragment();
                 fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
                 break;
             case R.id.ordermenu:
@@ -85,10 +80,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addRestaurant(View view) {
-        Intent i = new Intent(this, ItemInputActivity.class);
+        Intent i = new Intent(this, RestaurantInput.class);
         i.putExtra("OPTIONS","ADD");
-        i.putExtra("TARGET", "RESTAURANT");
-        startActivityForResult(i, 102);
+        startActivityForResult(i, RESTAURANT_REQUEST_CODE);
         hideFabs(view);
     }
 
@@ -99,10 +93,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addFriend(View view) {
-        Intent i = new Intent(this, ItemInputActivity.class);
+        Intent i = new Intent(this, FriendInput.class);
         i.putExtra("OPTIONS","ADD");
-        i.putExtra("TARGET", "FRIEND");
-        startActivityForResult(i, 202);
+        startActivityForResult(i, FRIEND_REQUEST_CODE);
         hideFabs(view);
     }
 
@@ -125,22 +118,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 102 && resultCode == RESULT_OK) {
-            if(fragment != null) {
-                fragment.updateView();
-            } else {
-                fragment = new CustomFragment();
-                fragment.setTarget("RESTAURANT");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        switch (requestCode) {
+            case FRIEND_REQUEST_CODE:
+                fragment = new FriendFragment();
                 fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
-            }
-        } else if(requestCode == 202 && resultCode == RESULT_OK) {
-            if(fragment != null) {
-                fragment.updateView();
-            } else {
-                fragment = new CustomFragment();
-                fragment.setTarget("FRIEND");
+                break;
+            case RESTAURANT_REQUEST_CODE:
+                fragment = new RestaurantFragment();
                 fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
-            }
+                break;
         }
     }
 }

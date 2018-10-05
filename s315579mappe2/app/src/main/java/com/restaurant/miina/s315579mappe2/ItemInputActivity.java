@@ -12,44 +12,43 @@ import android.widget.Toast;
 import com.restaurant.miina.s315579mappe2.Friends.Friend;
 import com.restaurant.miina.s315579mappe2.Restaurants.Restaurant;
 
-public class ItemInputActivity extends AppCompatActivity {
+public abstract class ItemInputActivity extends AppCompatActivity {
     EditText name;
     EditText address;
     EditText phone;
     EditText type;
+    TextView title;
+    TextView typeLabel;
     Button addBtn;
     Button updateBtn;
     Button deleteBtn;
-    TextView title;
     DBHandler db;
     long id;
-    boolean isRestaurant;
-    Restaurant restaurant;
-    Friend friend;
+    boolean isUpdate;
+    abstract void setTitle(boolean update);
+    abstract void setValues(long id);
+    abstract void addItem();
+    abstract void updateItem(long id);
+    abstract void deleteItem(long id);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_input);
+
         name = findViewById(R.id.nameInput);
         address = findViewById(R.id.addressInput);
         phone = findViewById(R.id.phoneInput);
         type = findViewById(R.id.typeInput);
-        isRestaurant = getIntent().getStringExtra("TARGET").equals("RESTAURANT");
-
-        if(!isRestaurant) {
-            TextView typeLabel = findViewById(R.id.typeLabel);
-            typeLabel.setVisibility(View.GONE);
-            type.setVisibility(View.GONE);
-
-        }
+        typeLabel = findViewById(R.id.typeLabel);
         addBtn = findViewById(R.id.addBtn);
         updateBtn = findViewById(R.id.updateBtn);
         deleteBtn = findViewById(R.id.deleteBtn);
         title = findViewById(R.id.header);
         db = new DBHandler(this);
+        isUpdate = getIntent().getStringExtra("OPTIONS").equals("UPDATE");
 
-        if(getIntent().getStringExtra("OPTIONS").equals("UPDATE")) {
+        if(isUpdate) {
             Log.d("OPTIONS","UPDATE");
             addBtn.setVisibility(View.GONE);
             setTitle(true);
@@ -57,44 +56,13 @@ public class ItemInputActivity extends AppCompatActivity {
             setValues(id);
         } else {
             Log.d("OPTIONS","ADD");
+            setTitle(false);
             updateBtn.setVisibility(View.GONE);
             deleteBtn.setVisibility(View.GONE);
         }
 
     }
 
-    private void setTitle(boolean update) {
-        if(update) {
-            if(isRestaurant) {
-                title.setText("Update Restaurant");
-            } else {
-                title.setText("Update Friend");
-            }
-        } else {
-            if(isRestaurant) {
-                title.setText("Add Restaurant");
-            } else {
-                title.setText("Add Friend");
-            }
-        }
-
-    }
-
-    private void setValues(long id) {
-        if(isRestaurant) {
-            Restaurant restaurant = db.getRestaurant(id);
-            name.setText(restaurant.getName());
-            address.setText(restaurant.getAddress());
-            phone.setText(restaurant.getPhone());
-            type.setText(restaurant.getType());
-        } else {
-            Friend friend = db.getFriend(id);
-            name.setText(friend.getName());
-            address.setText(friend.getAddress());
-            phone.setText(friend.getPhone());
-        }
-
-    }
 
     public void addNewItem(View view) {
         boolean ok = checkValues();
@@ -102,13 +70,7 @@ public class ItemInputActivity extends AppCompatActivity {
         if(!ok)
             return;
 
-        if(isRestaurant) {
-            restaurant = new Restaurant(name.getText().toString(),phone.getText().toString(),address.getText().toString(),type.getText().toString());
-            db.regRestaurant(restaurant);
-        } else {
-            friend = new Friend(name.getText().toString(),phone.getText().toString(),address.getText().toString());
-            db.regFriend(friend);
-        }
+        addItem();
 
         setResult(RESULT_OK);
         finish();
@@ -118,7 +80,6 @@ public class ItemInputActivity extends AppCompatActivity {
         String nameText = name.getText().toString();
         String addressText = address.getText().toString();
         String phoneText = phone.getText().toString();
-        String typeText = type.getText().toString();
 
         if(nameText.isEmpty() || addressText.isEmpty() || phoneText.isEmpty()) {
             Toast.makeText(this, "All fields must be filled", Toast.LENGTH_SHORT).show();
@@ -138,13 +99,9 @@ public class ItemInputActivity extends AppCompatActivity {
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(isRestaurant) {
-            restaurant = new Restaurant(id, name.getText().toString(), phone.getText().toString(), address.getText().toString(), type.getText().toString());
-            db.updateRestaurant(restaurant);
-        } else {
-            friend = new Friend(id, name.getText().toString(), phone.getText().toString(), address.getText().toString());
-            db.updateFriend(friend);
-        }
+
+        updateItem(id);
+
         setResult(RESULT_OK);
         finish();
     }
@@ -156,11 +113,7 @@ public class ItemInputActivity extends AppCompatActivity {
             return;
         }
 
-        if(isRestaurant) {
-            db.deleteRestaurant(id);
-        } else {
-            db.deleteFriend(id);
-        }
+        deleteItem(id);
         setResult(RESULT_OK);
         finish();
     }

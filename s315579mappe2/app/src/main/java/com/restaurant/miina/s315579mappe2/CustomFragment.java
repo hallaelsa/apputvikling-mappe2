@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.restaurant.miina.s315579mappe2.Friends.Friend;
 import com.restaurant.miina.s315579mappe2.Restaurants.Restaurant;
@@ -21,73 +22,56 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 // TODO! set target via bundle istedenfor egen metode!
-public class CustomFragment extends Fragment {
+public abstract class CustomFragment extends Fragment {
     ListView lv;
+    TextView header;
     CustomAdapter adapter;
     CustomViewModel model;
-    String target;
-    final String resTarget = "RESTAURANT";
-
     private CustomViewModel mViewModel;
-
-    public static CustomFragment newInstance() {
-        return new CustomFragment();
-    }
+    abstract CustomAdapter setAdapter();
+    abstract CustomViewModel getViewModel();
+    abstract Intent getCustomIntent();
+    abstract int getRequestCode();
+    abstract String getHeader();
 
     public void updateView() {
-        if(target.equals(resTarget)) {
-            adapter.refreshRestaurant(model.getUpdatedRestaurants());
-        } else {
-            adapter.refreshFriends(model.getUpdatedFriends());
-        }
-
+        adapter.refresh(model.getUpdatedList());
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        model = ViewModelProviders.of(this).get(CustomViewModel.class);
-        if(target.equals(resTarget)) {
-            List<Restaurant> listRestaurants = model.getRestaurants();
-            adapter = new CustomAdapter(getActivity(), listRestaurants, null);
-        } else {
-            List<Friend> listFriends = model.getFriends();
-            adapter = new CustomAdapter(getActivity(), null, listFriends);
-        }
-
-
+        model = getViewModel();
+        adapter = setAdapter();
         View rootView = inflater.inflate(R.layout.custom_fragment, container, false);
-
-        lv = (ListView)rootView.findViewById(R.id.list_view);
+        header = rootView.findViewById(R.id.listHeader);
+        header.setText(getHeader());
+        lv = rootView.findViewById(R.id.list_view);
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                Intent i = new Intent(getActivity(), ItemInputActivity.class);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = getCustomIntent();
                 i.putExtra("OPTIONS","UPDATE");
-                i.putExtra("TARGET", target);
                 i.putExtra("ID", id);
-                startActivityForResult(i, 101);
-
+                startActivityForResult(i, getRequestCode());
             }
         });
 
         return rootView;
     }
 
+
+    // abstract method?
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 101 && resultCode == RESULT_OK) {
+        Log.d("Requestcode", String.valueOf(requestCode));
 
-            Log.d("Fragment","101");
-
+        if(requestCode == getRequestCode() && resultCode == RESULT_OK) {
             updateView();
         }
     }
@@ -95,12 +79,8 @@ public class CustomFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(CustomViewModel.class);
+        mViewModel = getViewModel();
         // TODO: Use the ViewModel
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
     }
 
 
