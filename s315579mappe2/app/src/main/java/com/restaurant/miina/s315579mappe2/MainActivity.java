@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addOrder(View view) {
-        Intent i = new Intent(this, Add_Order_Activity.class);
+        Intent i = new Intent(this, CreateOrderActivity.class);
         startActivity(i);
         hideFabs(view);
     }
