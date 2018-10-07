@@ -1,5 +1,6 @@
 package com.restaurant.miina.s315579mappe2;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,8 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.restaurant.miina.s315579mappe2.Orders.Add_Order_Activity;
-
 // TODO! Se om det er en bedre å oppdatere fragmentet på. Kanskje via updatemetoden.
 public class MainActivity extends AppCompatActivity {
     FloatingActionButton fabPlus;
@@ -23,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fabOrder;
     FloatingActionButton fabRestaurant;
     FloatingActionButton fabMinus;
+    ActionBar actionbar;
     CustomFragment fragment;
     final int FRIEND_REQUEST_CODE = 10002;
     final int RESTAURANT_REQUEST_CODE = 20002;
@@ -35,8 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar = getSupportActionBar();
         fabPlus = (FloatingActionButton)findViewById(R.id.fabPlus);
         fabFriend = (FloatingActionButton)findViewById(R.id.fabFriend);
         fabOrder = (FloatingActionButton)findViewById(R.id.fabOrder);
@@ -62,15 +61,24 @@ public class MainActivity extends AppCompatActivity {
             case R.id.resmenu:
                 fragment = new RestaurantFragment();
                 fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
+                actionbar.setTitle(R.string.resMenuText);
+                actionbar.setDisplayHomeAsUpEnabled(true);
                 break;
             case R.id.friedsmenu:
                 fragment = new FriendFragment();
                 fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
+                actionbar.setTitle(R.string.friendsMenuText);
+                actionbar.setDisplayHomeAsUpEnabled(true);
+
                 break;
             case R.id.ordermenu:
-                Intent i3 = new Intent(this, Add_Order_Activity.class);
-                startActivity(i3);
+//                Intent i3 = new Intent(this, Add_Order_Activity.class);
+//                startActivity(i3);
                 break;
+            case android.R.id.home:
+                fragmentManager.beginTransaction().remove(fragment).commit();
+                actionbar.setTitle(R.string.app_name);
+                actionbar.setDisplayHomeAsUpEnabled(false);
             default:
                 return super.onOptionsItemSelected(item);
         }

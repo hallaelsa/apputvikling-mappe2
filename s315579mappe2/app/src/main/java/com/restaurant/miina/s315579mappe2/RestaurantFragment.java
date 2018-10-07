@@ -13,7 +13,7 @@ public class RestaurantFragment extends CustomFragment {
     @Override
     CustomAdapter setAdapter() {
         List<Restaurant> listRestaurants = model.getList();
-        CustomAdapter adapter = new RestaurantAdapter(getActivity(), listRestaurants);
+        CustomAdapter adapter = new RestaurantAdapter(getActivity(), listRestaurants, flag);
         return adapter;
     }
 
@@ -33,7 +33,12 @@ public class RestaurantFragment extends CustomFragment {
     }
 
     @Override
-    String getHeader() {
-        return "My Restaurants";
+    void setFlag(int flag) {
+        this.flag = flag;
+    }
+
+    @Override
+    int getLayout() {
+        return R.layout.custom_fragment;
     }
 }

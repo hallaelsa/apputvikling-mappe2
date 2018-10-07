@@ -13,7 +13,7 @@ public class FriendFragment extends CustomFragment {
     @Override
     CustomAdapter setAdapter() {
         List<Friend> listFriends = model.getList();
-        CustomAdapter adapter = new FriendAdapter(getActivity(), listFriends);
+        CustomAdapter adapter = new FriendAdapter(getActivity(), listFriends, flag);
         return adapter;
     }
 
@@ -33,8 +33,13 @@ public class FriendFragment extends CustomFragment {
     }
 
     @Override
-    String getHeader() {
-        return "Friends list";
+    void setFlag(int flag) {
+        this.flag = flag;
+    }
+
+    @Override
+    int getLayout() {
+        return R.layout.custom_fragment;
     }
 
 }

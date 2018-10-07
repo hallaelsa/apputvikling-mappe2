@@ -5,26 +5,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
 
 public abstract class CustomAdapter extends BaseAdapter {
     private List list;
+    public int flag;
     private LayoutInflater inflater;
     abstract void refresh(List list);
     abstract void setText(ViewHolder holder, int position);
+    abstract int getLayout();
 
-    public CustomAdapter(Context context, List list) {
+    public CustomAdapter(Context context, List list, int flag) {
+        this.flag = flag;
         this.list = list;
-        inflater = LayoutInflater.from(context);
+        this.inflater = LayoutInflater.from(context);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         CustomAdapter.ViewHolder holder;
         if(convertView == null){
-            convertView = inflater.inflate(R.layout.item_row, null);
+            convertView = inflater.inflate(getLayout(), null);
             holder = new CustomAdapter.ViewHolder();
             holder.header = (TextView)convertView.findViewById(R.id.header);
             holder.address = (TextView)convertView.findViewById(R.id.address);
@@ -36,16 +40,6 @@ public abstract class CustomAdapter extends BaseAdapter {
         }
 
         setText(holder, position);
-//        if(restaurants != null ) {
-//            holder.header.setText(list.get(position).getName());
-//            holder.address.setText(list.get(position).getAddress());
-//            holder.phone.setText(list.get(position).getPhone());
-//            holder.type.setText(list.get(position).getType());
-//        } else {
-//            holder.header.setText(friends.get(position).getName());
-//            holder.address.setText(friends.get(position).getAddress());
-//            holder.phone.setText(friends.get(position).getPhone());
-//        }
 
         return convertView;
     }

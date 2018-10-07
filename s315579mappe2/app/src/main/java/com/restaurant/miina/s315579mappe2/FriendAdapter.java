@@ -11,8 +11,8 @@ import java.util.List;
 public class FriendAdapter extends CustomAdapter {
     List<Friend> friends;
 
-    public FriendAdapter(Context context, List<Friend> friends) {
-        super(context, friends);
+    public FriendAdapter(Context context, List<Friend> friends, int flag) {
+        super(context, friends, flag);
         this.friends = friends;
     }
 
@@ -40,8 +40,22 @@ public class FriendAdapter extends CustomAdapter {
 
     @Override
     void setText(ViewHolder holder, int position) {
-        holder.header.setText(friends.get(position).getName());
-        holder.address.setText(friends.get(position).getAddress());
-        holder.phone.setText(friends.get(position).getPhone());
+        if(flag == FriendFragment.SIMPLIFIED_CHECK_LIST_FLAG) {
+            holder.header.setText(friends.get(position).getName());
+        } else {
+            holder.header.setText(friends.get(position).getName());
+            holder.address.setText(friends.get(position).getAddress());
+            holder.phone.setText(friends.get(position).getPhone());
+        }
+
+    }
+
+    @Override
+    int getLayout() {
+        if (flag == FriendFragment.SIMPLIFIED_CHECK_LIST_FLAG) {
+            return R.layout.item_checkbox_row;
+        }
+
+        return R.layout.item_row;
     }
 }

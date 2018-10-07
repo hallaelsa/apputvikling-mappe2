@@ -15,4 +15,8 @@
     <string name="addBtnLabel">Add</string>
     <string name="updateBtnLabel">Update</string>
     <string name="deleteBtnLabel">Delete</string>
+    <string name="resDropdownHeaderText">Choose restaurant</string>
+    <string name="datepickerBtn">Select date</string>
+    <string name="selectedDateBase">Date:</string>
+    <string name="chooseFriends">Choose friends</string>
 </resources>

@@ -17,9 +17,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Orders.Add_Order_Activity"
-            android:parentActivityName=".MainActivity" />
-        <activity
             android:name=".FriendInput"
             android:parentActivityName=".MainActivity" />
         <activity
