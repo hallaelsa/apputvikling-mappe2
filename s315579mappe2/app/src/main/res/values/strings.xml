@@ -23,6 +23,12 @@
     <string name="datepickerBtn">Select date</string>
     <string name="selectedDateBase">Date:</string>
     <string name="chooseFriends">Choose friends</string>
-    <string name="SMScheckbox">Turn SMS on/off</string>
+    <string name="setSMScheckboxTitle">SMS</string>
+    <string name="setSMSsummary">Enable SMS notification</string>
     <string name="chooseDate">Choose date</string>
+    <string name="dateHint">Click to add date</string>
+    <string name="setUsernameTitle">Username</string>
+    <string name="setUsernameSummary">Set a username to appear on the SMS notification to you friends</string>
+    <string name="SettingsHeader">Settings</string>
+    <string name="CreateOrderBtn">Add</string>
 </resources>

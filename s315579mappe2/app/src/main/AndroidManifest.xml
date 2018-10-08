@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,15 +17,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FriendInput"
-            android:parentActivityName=".MainActivity" />
+            android:name=".Activities.FriendInput"
+            android:parentActivityName=".Activities.MainActivity" />
         <activity
-            android:name=".RestaurantInput"
-            android:parentActivityName=".MainActivity" />
+            android:name=".Activities.RestaurantInput"
+            android:parentActivityName=".Activities.MainActivity" />
         <activity
-            android:name=".CreateOrderActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".SettingsActivity"></activity>
+            android:name=".Activities.CreateOrderActivity"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity android:name=".Activities.SettingsActivity" />
+        <activity android:name=".Activities.Test"></activity>
     </application>
 
 </manifest>

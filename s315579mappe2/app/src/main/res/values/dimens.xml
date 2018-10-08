@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="low">60dp</dimen>
-    <dimen name="middle">120dp</dimen>
-    <dimen name="high">180dp</dimen>
+    <dimen name="low">76dp</dimen>
+    <dimen name="middle">136dp</dimen>
+    <dimen name="high">196dp</dimen>
 </resources>

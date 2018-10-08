@@ -5,10 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
-import com.restaurant.miina.s315579mappe2.Friends.Friend;
-import com.restaurant.miina.s315579mappe2.Orders.Order;
-import com.restaurant.miina.s315579mappe2.Restaurants.Restaurant;
+import com.restaurant.miina.s315579mappe2.Models.Friend;
+import com.restaurant.miina.s315579mappe2.Models.Order;
+import com.restaurant.miina.s315579mappe2.Models.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -248,7 +249,7 @@ public class DBHandler extends SQLiteOpenHelper {
     //---------------------------------- ORDER -----------------------------------
 
     // create order
-    public long createOrder(Order order, Friend[] friends) {
+    public long createOrder(Order order) {
         long res_id = order.getRestaurant().get_ID();
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -258,7 +259,7 @@ public class DBHandler extends SQLiteOpenHelper {
         long order_id = db.insert(TABLE_ORDER, null, values);
         db.close();
 
-        for (Friend friend : friends) {
+        for (Friend friend : order.getFriends()) {
             createOrderFriend(order_id, friend.get_ID());
         }
 
@@ -285,14 +286,18 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
         db.close();
 
+        Log.d("getOrder()", String.valueOf(o.getFriends().size())+" friends found");
+
         return o;
     }
 
     private List<Friend> getFriendsForOrder(long order_id) {
         List<Friend> friends = new ArrayList<Friend>();
-        String friendQuery = "SELECT * FROM " + TABLE_FRIENDS + " f LEFT JOIN "
-                + TABLE_ORDER_FRIENDS + " of ON of."+ KEY_FRIEND_ID + " = f."
-                + KEY_FRIEND_ID + " WHERE of." + KEY_ORDER_ID + " = " + order_id;
+        String friendQuery = "SELECT * FROM " + TABLE_FRIENDS + " INNER JOIN "
+                + TABLE_ORDER_FRIENDS + " ON "+TABLE_FRIENDS +"."+ KEY_ID + " = "+TABLE_ORDER_FRIENDS+"."
+                + KEY_FRIEND_ID + " WHERE "+TABLE_ORDER_FRIENDS+"." + KEY_ORDER_ID + " = " + order_id;
+
+        Log.d("getFriOrdQuery", friendQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(friendQuery, null);
@@ -305,13 +310,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 f.setAddress(c.getString(c.getColumnIndex(KEY_ADDRESS)));
                 f.setPhone(c.getString(c.getColumnIndex(KEY_PH_NO)));
                 friends.add(f);
-
-                friends.add(f);
+                Log.d("FriendsForOrder", "friend added!");
             } while (c.moveToNext());
         }
         c.close();
         db.close();
 
+        Log.d("getFriendsForOrder", String.valueOf(friends.size())+" friends found");
         return friends;
 
     }
