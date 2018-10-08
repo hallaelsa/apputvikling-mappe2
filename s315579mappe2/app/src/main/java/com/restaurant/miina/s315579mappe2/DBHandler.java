@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.restaurant.miina.s315579mappe2.Friends.Friend;
 import com.restaurant.miina.s315579mappe2.Orders.Order;
@@ -114,9 +113,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public List<Friend> getAllFriends() {
         List<Friend> friends = new ArrayList<Friend>();
         String selectQuery = "SELECT  * FROM " + TABLE_FRIENDS;
-
-        Log.e("DBHandler getAllFriends", selectQuery);
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -143,7 +139,6 @@ public class DBHandler extends SQLiteOpenHelper {
         String orderQuery = "SELECT  * FROM " + TABLE_FRIENDS + " WHERE "
                 + KEY_ID + " = " + friend_id;
 
-        Log.e("DBHandler getFriend", orderQuery);
         Cursor c = db.rawQuery(orderQuery, null);
 
         if (c != null)
@@ -207,8 +202,6 @@ public class DBHandler extends SQLiteOpenHelper {
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
         String selectQuery = "SELECT  * FROM " + TABLE_RESTAURANTS;
 
-        Log.e("DBHandler getAllRes", selectQuery);
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -235,8 +228,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String orderQuery = "SELECT  * FROM " + TABLE_RESTAURANTS + " WHERE "
                 + KEY_ID + " = " + res_id;
-
-        Log.e("DBHandler getRes", orderQuery);
         Cursor c = db.rawQuery(orderQuery, null);
 
         if (c != null)
@@ -281,8 +272,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String orderQuery = "SELECT  * FROM " + TABLE_ORDER + " WHERE "
                 + KEY_ID + " = " + order_id;
-
-        Log.e("DBHandler getOrder", orderQuery);
         Cursor c = db.rawQuery(orderQuery, null);
 
         if (c != null)
@@ -304,8 +293,6 @@ public class DBHandler extends SQLiteOpenHelper {
         String friendQuery = "SELECT * FROM " + TABLE_FRIENDS + " f LEFT JOIN "
                 + TABLE_ORDER_FRIENDS + " of ON of."+ KEY_FRIEND_ID + " = f."
                 + KEY_FRIEND_ID + " WHERE of." + KEY_ORDER_ID + " = " + order_id;
-
-        Log.e("DBHandler gfForOrder", friendQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(friendQuery, null);

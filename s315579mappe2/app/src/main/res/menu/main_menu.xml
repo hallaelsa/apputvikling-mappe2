@@ -9,4 +9,7 @@
     <item
         android:id="@+id/ordermenu"
         android:title="@string/ordersMenuText"/>
+    <item
+        android:id="@+id/settingsmenu"
+        android:title="@string/settings"/>
 </menu>

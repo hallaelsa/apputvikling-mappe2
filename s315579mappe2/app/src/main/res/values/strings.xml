@@ -1,12 +1,16 @@
 <resources>
-    <string name="app_name">s315579mappe2</string>
+    <string name="app_name">My Booking System</string>
     <string name="regResBtn">Restaurant overview</string>
     <string name="regFriendsBtn">Friends overview</string>
     <string name="resMenuText">My Restaurants</string>
     <string name="friendsMenuText">My Friends</string>
     <string name="ordersMenuText">My Orders</string>
+    <string name="settings">Settings</string>
     <string name="ResHeader">Add Restaurant</string>
     <string name="FriHeader">Add Friend</string>
+    <string name="OrderHeader">Create Order</string>
+    <string name="FriUpdateHeader">Update Friend</string>
+    <string name="ResUpdateHeader">Update restaurant</string>
     <string name="OrdHeader">Add Order</string>
     <string name="nameLabel">Name</string>
     <string name="addressLabel">Address</string>
@@ -19,4 +23,6 @@
     <string name="datepickerBtn">Select date</string>
     <string name="selectedDateBase">Date:</string>
     <string name="chooseFriends">Choose friends</string>
+    <string name="SMScheckbox">Turn SMS on/off</string>
+    <string name="chooseDate">Choose date</string>
 </resources>

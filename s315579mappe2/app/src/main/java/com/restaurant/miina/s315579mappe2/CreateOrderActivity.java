@@ -1,26 +1,17 @@
 package com.restaurant.miina.s315579mappe2;
 
 import android.app.DatePickerDialog;
-import android.graphics.drawable.BitmapDrawable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,11 +20,11 @@ import com.restaurant.miina.s315579mappe2.Friends.Friend;
 import com.restaurant.miina.s315579mappe2.Restaurants.Restaurant;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class CreateOrderActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatePickerDialog.OnDateSetListener {
     TextView selectedDate;
+    ActionBar actionbar;
     List<Friend> friendList;
     List<Restaurant> restaurantList;
     String[] friendNames;
@@ -55,6 +46,12 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
         friendList = db.getAllFriends();
         restaurantList = db.getAllRestaurants();
         selectedDate = findViewById(R.id.selectedDate);
+        Toolbar toolbar =
+                (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setTitle(R.string.OrderHeader);
 
         setArrays();
 
@@ -71,13 +68,14 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
         CustomFragment fragment = new FriendFragment();
         fragment.setFlag(FriendFragment.SIMPLIFIED_CHECK_LIST_FLAG);
         fragmentTransaction.replace(R.id.selectFriendsFrameLayout, fragment).commit();
-        Calendar calendar = Calendar.getInstance();
 
+        Calendar calendar = Calendar.getInstance();
         datePickerDialog = new DatePickerDialog(
-                this, CreateOrderActivity.this,calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),  calendar.get(Calendar.DAY_OF_MONTH));
+                this, CreateOrderActivity.this,calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),  calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
-        (findViewById(R.id.displayDatepicker))
+        (findViewById(R.id.selectedDate))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -88,19 +86,9 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void setArrays() {
-        friendNames = new String[friendList.size()];
-        friendIDs = new long[friendList.size()];
         restaurantIDs = new long[restaurantList.size()];
         restaurantNames = new String[restaurantList.size()];
-        checkSelectedFriends = new boolean[friendList.size()];
 
-        for(int i = 0 ; i < friendList.size(); i++) {
-            friendNames[i] = friendList.get(i).getName();
-            friendIDs[i] = friendList.get(i).get_ID();
-        }
-        for (int i = 0; i < checkSelectedFriends.length; i++) {
-            checkSelectedFriends[i] = false;
-        }
         for(int i = 0 ; i < restaurantList.size(); i++) {
             restaurantNames[i] = restaurantList.get(i).getName();
             restaurantIDs[i] = restaurantList.get(i).get_ID();
@@ -115,13 +103,13 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
-        chosenRestaurantID = restaurantIDs[0];        Toast.makeText(getApplicationContext(), "Nothing selected", Toast.LENGTH_SHORT).show();
+        chosenRestaurantID = restaurantIDs[0];
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         month +=1;
         date = dayOfMonth+"."+month+"."+year;
-        selectedDate.setText(getResources().getString(R.string.selectedDateBase)+date);
+        selectedDate.setText(date);
     }
 }

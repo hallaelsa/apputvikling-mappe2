@@ -1,8 +1,11 @@
 package com.restaurant.miina.s315579mappe2;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,11 +20,11 @@ public abstract class ItemInputActivity extends AppCompatActivity {
     EditText address;
     EditText phone;
     EditText type;
-    TextView title;
     TextView typeLabel;
     Button addBtn;
     Button updateBtn;
     Button deleteBtn;
+    ActionBar actionbar;
     DBHandler db;
     long id;
     boolean isUpdate;
@@ -36,6 +39,12 @@ public abstract class ItemInputActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_input);
 
+        Toolbar toolbar =
+                (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+
         name = findViewById(R.id.nameInput);
         address = findViewById(R.id.addressInput);
         phone = findViewById(R.id.phoneInput);
@@ -44,7 +53,6 @@ public abstract class ItemInputActivity extends AppCompatActivity {
         addBtn = findViewById(R.id.addBtn);
         updateBtn = findViewById(R.id.updateBtn);
         deleteBtn = findViewById(R.id.deleteBtn);
-        title = findViewById(R.id.header);
         db = new DBHandler(this);
         isUpdate = getIntent().getStringExtra("OPTIONS").equals("UPDATE");
 
@@ -116,5 +124,22 @@ public abstract class ItemInputActivity extends AppCompatActivity {
         deleteItem(id);
         setResult(RESULT_OK);
         finish();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if(isUpdate) {
+                    Log.d("input", "UPDATE");
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+                    finish();
+                }
+                    break;
+        }
+        return true;
     }
 }

@@ -8,6 +8,14 @@
     android:orientation="vertical"
     tools:context=".CreateOrderActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,35 +30,35 @@
 
     <Spinner
         android:id="@+id/restaurantSpinner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:padding="8dp"
         />
 
-    <TableRow
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp">
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/chooseDate"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/displayDatepicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/datepickerBtn"
-            android:background="@color/colorAccent"
-            android:textColor="@color/colorLight"/>
+    <EditText
+        android:id="@+id/selectedDate"
+        android:focusable="false"
+        android:layout_width="match_parent"
+        android:hint="15.10.2020"
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/selectedDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
 
     <TextView
         android:layout_width="match_parent"

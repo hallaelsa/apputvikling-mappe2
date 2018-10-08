@@ -22,7 +22,10 @@
         <activity
             android:name=".RestaurantInput"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".CreateOrderActivity"></activity>
+        <activity
+            android:name=".CreateOrderActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>

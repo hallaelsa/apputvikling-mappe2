@@ -2,7 +2,9 @@ package com.restaurant.miina.s315579mappe2;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -10,18 +12,19 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-// TODO! Se om det er en bedre å oppdatere fragmentet på. Kanskje via updatemetoden.
 public class MainActivity extends AppCompatActivity {
     FloatingActionButton fabPlus;
     FloatingActionButton fabFriend;
     FloatingActionButton fabOrder;
     FloatingActionButton fabRestaurant;
     FloatingActionButton fabMinus;
+    SharedPreferences sharedPreferences;
     ActionBar actionbar;
     CustomFragment fragment;
     final int FRIEND_REQUEST_CODE = 10002;
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         fabOrder = (FloatingActionButton)findViewById(R.id.fabOrder);
         fabRestaurant = (FloatingActionButton)findViewById(R.id.fabRestaurant);
         fabMinus = (FloatingActionButton)findViewById(R.id.fabMinus);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
     }
 
@@ -75,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
 //                Intent i3 = new Intent(this, Add_Order_Activity.class);
 //                startActivity(i3);
                 break;
+            case R.id.settingsmenu:
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+
             case android.R.id.home:
                 fragmentManager.beginTransaction().remove(fragment).commit();
                 actionbar.setTitle(R.string.app_name);
@@ -128,14 +138,24 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Log.d("resultcode",String.valueOf(resultCode));
+        Log.d("requestcode",String.valueOf(requestCode));
         switch (requestCode) {
             case FRIEND_REQUEST_CODE:
-                fragment = new FriendFragment();
-                fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
+                if(resultCode == RESULT_OK) {
+                    fragment = new FriendFragment();
+                    fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
+                    actionbar.setTitle(R.string.friendsMenuText);
+                    actionbar.setDisplayHomeAsUpEnabled(true);
+                }
                 break;
             case RESTAURANT_REQUEST_CODE:
-                fragment = new RestaurantFragment();
-                fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
+                if(resultCode == RESULT_OK) {
+                    fragment = new RestaurantFragment();
+                    fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
+                    actionbar.setTitle(R.string.resMenuText);
+                    actionbar.setDisplayHomeAsUpEnabled(true);
+                }
                 break;
         }
     }

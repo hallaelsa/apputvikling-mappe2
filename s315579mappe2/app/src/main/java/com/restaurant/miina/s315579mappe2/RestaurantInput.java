@@ -8,9 +8,9 @@ public class RestaurantInput extends ItemInputActivity {
     @Override
     void setTitle(boolean update) {
         if(update) {
-            title.setText("Update Restaurant");
+            actionbar.setTitle(R.string.ResUpdateHeader);
         } else {
-            title.setText("Add Resaurant");
+            actionbar.setTitle(R.string.ResHeader);
         }
     }
 

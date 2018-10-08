@@ -1,7 +1,9 @@
 package com.restaurant.miina.s315579mappe2;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.restaurant.miina.s315579mappe2.Friends.Friend;
 
@@ -18,9 +20,9 @@ public class FriendInput extends ItemInputActivity {
     @Override
     void setTitle(boolean update) {
         if(update) {
-            title.setText("Update Friend");
+            actionbar.setTitle(R.string.FriUpdateHeader);
         } else {
-            title.setText("Add Friend");
+            actionbar.setTitle(R.string.FriHeader);
         }
     }
 
@@ -48,4 +50,5 @@ public class FriendInput extends ItemInputActivity {
     void deleteItem(long id) {
         db.deleteFriend(id);
     }
+
 }
