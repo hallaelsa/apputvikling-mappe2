@@ -1,10 +1,7 @@
 package com.restaurant.miina.s315579mappe2.Activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -15,17 +12,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.restaurant.miina.s315579mappe2.Fragments.CustomFragment;
 import com.restaurant.miina.s315579mappe2.Fragments.FriendFragment;
+import com.restaurant.miina.s315579mappe2.Fragments.OrderFragment;
 import com.restaurant.miina.s315579mappe2.R;
 import com.restaurant.miina.s315579mappe2.Fragments.RestaurantFragment;
 
@@ -96,8 +92,10 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             case R.id.ordermenu:
-                Intent intent = new Intent(this, Test.class);
-                startActivity(intent);
+                OrderFragment orderFragment = new OrderFragment();
+                fragmentTransaction.replace(R.id.frameLayout, orderFragment).commit();
+                actionbar.setTitle(R.string.ordersMenuText);
+                actionbar.setDisplayHomeAsUpEnabled(true);
                 break;
             case R.id.settingsmenu:
                 Intent i = new Intent(this, SettingsActivity.class);
@@ -117,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addRestaurant(View view) {
-        Intent i = new Intent(this, RestaurantInput.class);
+        Intent i = new Intent(this, RestaurantInputActivity.class);
         i.putExtra("OPTIONS","ADD");
         startActivityForResult(i, RESTAURANT_REQUEST_CODE);
         hideFabs(view);
@@ -130,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addFriend(View view) {
-        Intent i = new Intent(this, FriendInput.class);
+        Intent i = new Intent(this, FriendInputActivity.class);
         i.putExtra("OPTIONS","ADD");
         startActivityForResult(i, FRIEND_REQUEST_CODE);
         hideFabs(view);
@@ -187,8 +185,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         hideFabs();
-        Log.d("resultcode",String.valueOf(resultCode));
-        Log.d("requestcode",String.valueOf(requestCode));
         switch (requestCode) {
             case FRIEND_REQUEST_CODE:
                 if(resultCode == RESULT_OK) {
@@ -214,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPreferences.getBoolean("SMScheckbox", false);
         Log.d("preferences", String.valueOf(sharedPreferences.getBoolean("SMScheckbox", false)));
+        Log.d("preferences", sharedPreferences.getString("setUsername", ""));
     }
 }

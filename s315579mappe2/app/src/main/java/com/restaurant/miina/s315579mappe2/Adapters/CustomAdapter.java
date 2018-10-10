@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.restaurant.miina.s315579mappe2.R;
@@ -32,9 +33,10 @@ public abstract class CustomAdapter extends BaseAdapter {
             convertView = inflater.inflate(getLayout(), null);
             holder = new CustomAdapter.ViewHolder();
             holder.header = (TextView)convertView.findViewById(R.id.header);
-            holder.address = (TextView)convertView.findViewById(R.id.address);
-            holder.phone = (TextView)convertView.findViewById(R.id.phone);
-            holder.type = (TextView)convertView.findViewById(R.id.type);
+            holder.arg1 = (TextView)convertView.findViewById(R.id.arg1);
+            holder.arg2 = (TextView)convertView.findViewById(R.id.arg2);
+            holder.arg3 = (TextView)convertView.findViewById(R.id.arg3);
+            holder.checkBox = (CheckBox)convertView.findViewById(R.id.checkbox);
             convertView.setTag(holder);
         } else {
             holder = (CustomAdapter.ViewHolder) convertView.getTag();
@@ -47,8 +49,9 @@ public abstract class CustomAdapter extends BaseAdapter {
 
     public static class ViewHolder {
         public TextView header;
-        public TextView address;
-        public TextView phone;
-        public TextView type;
+        public TextView arg1;
+        public TextView arg2;
+        public TextView arg3;
+        public CheckBox checkBox;
     }
 }

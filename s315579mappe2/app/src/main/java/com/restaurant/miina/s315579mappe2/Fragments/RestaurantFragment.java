@@ -3,7 +3,7 @@ package com.restaurant.miina.s315579mappe2.Fragments;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 
-import com.restaurant.miina.s315579mappe2.Activities.RestaurantInput;
+import com.restaurant.miina.s315579mappe2.Activities.RestaurantInputActivity;
 import com.restaurant.miina.s315579mappe2.Adapters.CustomAdapter;
 import com.restaurant.miina.s315579mappe2.Adapters.RestaurantAdapter;
 import com.restaurant.miina.s315579mappe2.Fragments.ViewModels.CustomViewModel;
@@ -30,7 +30,7 @@ public class RestaurantFragment extends CustomFragment {
 
     @Override
     public Intent getCustomIntent() {
-        return new Intent(getActivity(), RestaurantInput.class);
+        return new Intent(getActivity(), RestaurantInputActivity.class);
     }
 
     @Override

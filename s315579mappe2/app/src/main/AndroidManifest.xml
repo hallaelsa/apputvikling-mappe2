@@ -17,10 +17,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.FriendInput"
+            android:name=".Activities.FriendInputActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:parentActivityName=".Activities.MainActivity" />
         <activity
-            android:name=".Activities.RestaurantInput"
+            android:name=".Activities.RestaurantInputActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:parentActivityName=".Activities.MainActivity" />
         <activity
             android:name=".Activities.CreateOrderActivity"

@@ -15,7 +15,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.restaurant.miina.s315579mappe2.Adapters.CustomAdapter;
+import com.restaurant.miina.s315579mappe2.Adapters.FriendAdapter;
 import com.restaurant.miina.s315579mappe2.Fragments.ViewModels.CustomViewModel;
+import com.restaurant.miina.s315579mappe2.Models.Friend;
 import com.restaurant.miina.s315579mappe2.R;
 
 import java.util.ArrayList;
@@ -29,7 +31,10 @@ public abstract class CustomFragment extends Fragment {
     CustomAdapter adapter;
     CustomViewModel model;
     List<Long> checkedIDs;
+    List<Friend> friendsForUpdate;
+    boolean friendsForUpdateIsSet = false;
     int flag = DEFAULT_LIST_FLAG;
+    View rootView;
 
     private CustomViewModel mViewModel;
     public abstract CustomAdapter setAdapter();
@@ -51,10 +56,16 @@ public abstract class CustomFragment extends Fragment {
 
         model = getViewModel();
         adapter = setAdapter();
+        if(friendsForUpdateIsSet)
+            ((FriendAdapter)adapter).setFriendsChecked(friendsForUpdate);
         checkedIDs = new ArrayList<>();
-        View rootView = inflater.inflate(getLayout(), container, false);
+        rootView = inflater.inflate(getLayout(), container, false);
         lv = rootView.findViewById(R.id.list_view);
         lv.setAdapter(adapter);
+
+        if(friendsForUpdateIsSet) {
+            setFriendsForUpdate();
+        }
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -74,8 +85,6 @@ public abstract class CustomFragment extends Fragment {
                         cb.setChecked(false);
                         checkedIDs.remove(id);
                     }
-                    Toast.makeText(getActivity(), "Click item "+id, Toast.LENGTH_SHORT).show();
-                    Log.d("checkedIDs", String.valueOf(checkedIDs));
                 }
 
             }
@@ -84,11 +93,16 @@ public abstract class CustomFragment extends Fragment {
         return rootView;
     }
 
+    private void setFriendsForUpdate() {
+        for(int i = 0; i < friendsForUpdate.size(); i++) {
+            checkedIDs.add(friendsForUpdate.get(i).get_ID());
+        }
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        Log.d("Requestcode", String.valueOf(requestCode));
 
         if(requestCode == getRequestCode() && resultCode == RESULT_OK) {
             updateView();
@@ -110,6 +124,8 @@ public abstract class CustomFragment extends Fragment {
         if(lv != null)
             lv.setAlpha(num);
     }
+
+
 
 
 }

@@ -25,9 +25,9 @@ public class RestaurantAdapter extends CustomAdapter {
     @Override
     void setText(ViewHolder holder, int position) {
         holder.header.setText(restaurants.get(position).getName());
-        holder.address.setText(restaurants.get(position).getAddress());
-        holder.phone.setText(restaurants.get(position).getPhone());
-        holder.type.setText(restaurants.get(position).getType());
+        holder.arg1.setText(restaurants.get(position).getAddress());
+        holder.arg2.setText(restaurants.get(position).getPhone());
+        holder.arg3.setText(restaurants.get(position).getType());
     }
 
     @Override

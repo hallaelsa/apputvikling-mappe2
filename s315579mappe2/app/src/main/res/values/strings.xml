@@ -31,4 +31,5 @@
     <string name="setUsernameSummary">Set a username to appear on the SMS notification to you friends</string>
     <string name="SettingsHeader">Settings</string>
     <string name="CreateOrderBtn">Add</string>
+    <string name="OrderUpdateHeader">Update Order</string>
 </resources>

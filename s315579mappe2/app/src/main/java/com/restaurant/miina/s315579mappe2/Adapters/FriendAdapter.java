@@ -1,6 +1,7 @@
 package com.restaurant.miina.s315579mappe2.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.restaurant.miina.s315579mappe2.Fragments.FriendFragment;
 import com.restaurant.miina.s315579mappe2.Models.Friend;
@@ -10,6 +11,7 @@ import java.util.List;
 
 public class FriendAdapter extends CustomAdapter {
     List<Friend> friends;
+    List<Friend> friendsForUpdate;
 
     public FriendAdapter(Context context, List<Friend> friends, int flag) {
         super(context, friends, flag);
@@ -42,10 +44,18 @@ public class FriendAdapter extends CustomAdapter {
     void setText(ViewHolder holder, int position) {
         if(flag == FriendFragment.SIMPLIFIED_CHECK_LIST_FLAG) {
             holder.header.setText(friends.get(position).getName());
+            if(friendsForUpdate != null) {
+                for(Friend forupdate: friendsForUpdate) {
+                    if(forupdate.get_ID() == friends.get(position).get_ID()) {
+                        holder.checkBox.setChecked(true);
+                        Log.d("Adapter", "friendID: "+String.valueOf(friends.get(position).get_ID()));
+                    }
+                }
+            }
         } else {
             holder.header.setText(friends.get(position).getName());
-            holder.address.setText(friends.get(position).getAddress());
-            holder.phone.setText(friends.get(position).getPhone());
+            holder.arg1.setText(friends.get(position).getAddress());
+            holder.arg2.setText(friends.get(position).getPhone());
         }
 
     }
@@ -58,4 +68,9 @@ public class FriendAdapter extends CustomAdapter {
 
         return R.layout.item_row;
     }
+
+    public void setFriendsChecked(List<Friend> friendsForUpdate) {
+        this.friendsForUpdate = friendsForUpdate;
+    }
+
 }

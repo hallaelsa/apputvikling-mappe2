@@ -87,7 +87,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // update friend
-    public long updateFriend(Friend friend) {
+    public int updateFriend(Friend friend) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, friend.getName());
@@ -95,11 +95,11 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(KEY_PH_NO, friend.getPhone());
 
         // updating row
-        long updated_id = db.update(TABLE_FRIENDS, values, KEY_ID + " = ?",
+        int updated_rows = db.update(TABLE_FRIENDS, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(friend.get_ID()) });
         db.close();
 
-        return updated_id;
+        return updated_rows;
     }
 
     // delete friend
@@ -174,7 +174,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // update restaurant
-    public long updateRestaurant(Restaurant restaurant) {
+    public int updateRestaurant(Restaurant restaurant) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, restaurant.getName());
@@ -183,11 +183,11 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(KEY_RES_TYPE, restaurant.getType());
 
         // updating row
-        long updated_id = db.update(TABLE_RESTAURANTS, values, KEY_ID + " = ?",
+        int updated_rows = db.update(TABLE_RESTAURANTS, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(restaurant.get_ID()) });
         db.close();
 
-        return updated_id;
+        return updated_rows;
     }
 
     // delete restaurant
@@ -267,6 +267,31 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+    // create order
+    public int updateOrder(Order order) {
+        Log.d("DB", "order id "+order.get_ID());
+        long res_id = order.getRestaurant().get_ID();
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_RES_ID, res_id);
+        values.put(KEY_DATE, order.getDate());
+
+        int updated_rows = db.update(TABLE_ORDER, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(order.get_ID()) });
+
+        // must drop Order_FRIEND first!!!
+        dropOrderFriends(order.get_ID());
+        for (Friend friend : order.getFriends()) {
+            Log.d("Friends id: ", String.valueOf(friend.get_ID()));
+            createOrderFriend(order.get_ID(), friend.get_ID());
+        }
+
+        db.close();
+
+        return updated_rows;
+
+    }
+
     // get one order
     public Order getOrder(long order_id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -305,23 +330,55 @@ public class DBHandler extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             do {
                 Friend f = new Friend();
-                f.set_ID(c.getLong(c.getColumnIndex(KEY_ID)));
+                f.set_ID(c.getLong(c.getColumnIndex(KEY_FRIEND_ID)));
                 f.setName(c.getString(c.getColumnIndex(KEY_NAME)));
                 f.setAddress(c.getString(c.getColumnIndex(KEY_ADDRESS)));
                 f.setPhone(c.getString(c.getColumnIndex(KEY_PH_NO)));
                 friends.add(f);
-                Log.d("FriendsForOrder", "friend added!");
+               // Log.d("FriendsForOrder", "friend added!");
             } while (c.moveToNext());
         }
         c.close();
         db.close();
 
-        Log.d("getFriendsForOrder", String.valueOf(friends.size())+" friends found");
         return friends;
 
     }
 
-    // list all orders......?
+    public List<Order> getAllOrders() {
+        List<Order> orders = new ArrayList<Order>();
+        String selectQuery = "SELECT  * FROM " + TABLE_ORDER;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                Order o = new Order();
+                o.set_ID(c.getLong(c.getColumnIndex(KEY_ID)));
+                o.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+                o.setRestaurant(getRestaurant(c.getLong(c.getColumnIndex(KEY_RES_ID))));
+                o.setFriends(getFriendsForOrder(c.getLong(c.getColumnIndex(KEY_ID))));
+                orders.add(o);
+            } while (c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return orders;
+    }
+
+    public int deleteOrder(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int deleted_rows = db.delete(TABLE_ORDER, KEY_ID + " = ?",
+                new String[] { String.valueOf(id) });
+
+        dropOrderFriends(id);
+
+        db.close();
+
+        return deleted_rows;
+    }
 
     // create many-to-many connection for Order_Friend
     private long createOrderFriend(long order_id, long friend_id) {
@@ -334,6 +391,15 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
 
         return order_friend_id;
+    }
+
+    private int dropOrderFriends(long order_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int deleted_rows = db.delete(TABLE_ORDER_FRIENDS, KEY_ORDER_ID + " = ?",
+                new String[] { String.valueOf(order_id) });
+
+        Log.d("DELETE", String.valueOf(deleted_rows)+" rows deleted");
+        return deleted_rows;
     }
 
 }
