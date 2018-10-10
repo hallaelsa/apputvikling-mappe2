@@ -132,7 +132,6 @@ public abstract class ItemInputActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 if(isUpdate) {
-                    Log.d("input", "UPDATE");
                     setResult(RESULT_OK);
                     finish();
                 } else {

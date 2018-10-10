@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     CustomFragment fragment;
     final int FRIEND_REQUEST_CODE = 10002;
     final int RESTAURANT_REQUEST_CODE = 20002;
+    final int ORDER_REQUEST_CODE = 30003;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             case R.id.ordermenu:
-                OrderFragment orderFragment = new OrderFragment();
-                fragmentTransaction.replace(R.id.frameLayout, orderFragment).commit();
+                fragment = new OrderFragment();
+                fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
                 actionbar.setTitle(R.string.ordersMenuText);
                 actionbar.setDisplayHomeAsUpEnabled(true);
                 break;
@@ -123,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void addOrder(View view) {
         Intent i = new Intent(this, CreateOrderActivity.class);
-        startActivity(i);
+        i.putExtra("OPTIONS","ADD");
+        startActivityForResult(i, ORDER_REQUEST_CODE);
         hideFabs(view);
     }
 
@@ -199,6 +201,14 @@ public class MainActivity extends AppCompatActivity {
                     fragment = new RestaurantFragment();
                     fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
                     actionbar.setTitle(R.string.resMenuText);
+                    actionbar.setDisplayHomeAsUpEnabled(true);
+                }
+                break;
+            case ORDER_REQUEST_CODE:
+                if(resultCode == RESULT_OK) {
+                    fragment = new OrderFragment();
+                    fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
+                    actionbar.setTitle(R.string.ordersMenuText);
                     actionbar.setDisplayHomeAsUpEnabled(true);
                 }
                 break;

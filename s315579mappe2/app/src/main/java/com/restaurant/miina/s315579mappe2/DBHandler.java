@@ -259,6 +259,9 @@ public class DBHandler extends SQLiteOpenHelper {
         long order_id = db.insert(TABLE_ORDER, null, values);
         db.close();
 
+        if(order.getFriends() == null)
+            return order_id;
+        
         for (Friend friend : order.getFriends()) {
             createOrderFriend(order_id, friend.get_ID());
         }

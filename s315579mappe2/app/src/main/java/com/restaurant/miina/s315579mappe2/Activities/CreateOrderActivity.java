@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -204,6 +205,8 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
         }
 
         db.createOrder(order);
+        setResult(RESULT_OK);
+        finish();
 
     }
 
@@ -223,10 +226,29 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
         }
 
         db.updateOrder(orderForUpdate);
+        setResult(RESULT_OK);
+        finish();
 
     }
 
     public void deleteOrder(View view) {
         db.deleteOrder(orderForUpdate.get_ID());
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if(isUpdate) {
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+                    finish();
+                }
+                break;
+        }
+        return true;
     }
 }

@@ -93,24 +93,30 @@
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:gravity="top|center">
 
         <Button
             android:id="@+id/updateBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="172dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
+            android:background="@color/colorAccent"
             android:onClick="updateOrder"
-            android:text="@string/updateBtnLabel" />
+            android:text="@string/updateBtnLabel"
+            android:textColor="@color/colorLight" />
 
         <Button
             android:id="@+id/deleteBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="162dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
+            android:background="@color/complimentary"
             android:onClick="deleteOrder"
-            android:text="@string/deleteBtnLabel" />
+            android:text="@string/deleteBtnLabel"
+            android:textColor="@color/colorLight" />
     </TableRow>
 
 </LinearLayout>
