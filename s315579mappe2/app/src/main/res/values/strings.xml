@@ -32,4 +32,16 @@
     <string name="SettingsHeader">Settings</string>
     <string name="CreateOrderBtn">Add</string>
     <string name="OrderUpdateHeader">Update Order</string>
+    <string name="setMessageTitle">Edit default SMS</string>
+    <string name="defaultMessageBase">You have a dinner coming up at </string>
+    <string name="signMessageBase">Best regards </string>
+    <string name="setMessageSummary">Here you can edit the default message sent to your friends</string>
+    <string name="setHourText">Set hour</string>
+    <string name="setMinuteText">Set minutes</string>
+    <string name="setHourSummary">Set the hour you want the SMS notification to be sent</string>
+    <string name="setMinuteSummary">Set the minute over hour you want the SMS notification to be sent</string>
+    <string name="yes">Yes</string>
+    <string name="deleteDialogText">Are you sure you want to delete this entry?</string>
+    <string name="no">No</string>
+    <string name="deleteDialogTitle">Delete</string>
 </resources>

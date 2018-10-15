@@ -1,5 +1,7 @@
 package com.restaurant.miina.s315579mappe2.Activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,26 +53,22 @@ public abstract class ItemInputActivity extends AppCompatActivity {
         type = findViewById(R.id.typeInput);
         typeLabel = findViewById(R.id.typeLabel);
         addBtn = findViewById(R.id.addBtn);
-        updateBtn = findViewById(R.id.updateBtn);
         deleteBtn = findViewById(R.id.deleteBtn);
         db = new DBHandler(this);
         isUpdate = getIntent().getStringExtra("OPTIONS").equals("UPDATE");
 
         if(isUpdate) {
             Log.d("OPTIONS","UPDATE");
-            addBtn.setVisibility(View.GONE);
             setTitle(true);
             id = getIntent().getLongExtra("ID", 999999999);
             setValues(id);
         } else {
             Log.d("OPTIONS","ADD");
             setTitle(false);
-            updateBtn.setVisibility(View.GONE);
             deleteBtn.setVisibility(View.GONE);
         }
 
     }
-
 
     public void addNewItem(View view) {
         boolean ok = checkValues();
@@ -78,11 +76,20 @@ public abstract class ItemInputActivity extends AppCompatActivity {
         if(!ok)
             return;
 
-        addItem();
+        if(isUpdate) {
+            if(id == 999999999) {
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            updateItem(id);
+        } else {
+            addItem();
+        }
 
         setResult(RESULT_OK);
         finish();
     }
+
 
     private boolean checkValues() {
         String nameText = name.getText().toString();
@@ -97,33 +104,32 @@ public abstract class ItemInputActivity extends AppCompatActivity {
         return true;
     }
 
-    public void updateItem(View view) {
-        boolean ok = checkValues();
-
-        if(!ok)
-            return;
-
-        if(id == 999999999) {
-            Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        updateItem(id);
-
-        setResult(RESULT_OK);
-        finish();
-    }
-
     public void deleteItem(View view) {
-
         if(id == 999999999) {
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        deleteItem(id);
-        setResult(RESULT_OK);
-        finish();
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(this.getResources().getString(R.string.deleteDialogTitle))
+                .setMessage(this.getResources().getString(R.string.deleteDialogText))
+                .setPositiveButton(this.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteItem(id);
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton(this.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                })
+                .setCancelable(false)
+                .show();
+
     }
 
 

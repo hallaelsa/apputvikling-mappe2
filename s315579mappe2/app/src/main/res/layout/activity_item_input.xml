@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Activities.ItemInputActivity"
     android:orientation="vertical">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,7 +17,30 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+
+        <Button
+            android:id="@+id/addBtn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="right"
+            android:onClick="addNewItem"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_check_white_24dp"
+            android:padding="16dp" />
+
+        <Button
+            android:id="@+id/deleteBtn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="right"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_delete_forever_white_24dp"
+            android:onClick="deleteItem"
+            android:padding="16dp" />
+
+    </android.support.v7.widget.Toolbar>
 
     <TextView
         android:layout_width="wrap_content"
@@ -82,41 +104,5 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp" />
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp">
-
-        <Button
-            android:id="@+id/addBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="addNewItem"
-            android:background="@color/colorAccent"
-            android:textColor="@color/colorLight"
-            android:text="@string/addBtnLabel" />
-
-        <Button
-            android:id="@+id/updateBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:background="@color/colorAccent"
-            android:onClick="updateItem"
-            android:text="@string/updateBtnLabel"
-            android:textColor="@color/colorLight" />
-
-        <Button
-            android:id="@+id/deleteBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:background="@color/complimentary"
-            android:onClick="deleteItem"
-            android:text="@string/deleteBtnLabel"
-            android:textColor="@color/colorLight" />
-
-    </TableRow>
     </LinearLayout>
 </ScrollView>

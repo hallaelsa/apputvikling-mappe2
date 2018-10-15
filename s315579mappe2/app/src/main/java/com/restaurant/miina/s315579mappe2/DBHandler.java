@@ -261,7 +261,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if(order.getFriends() == null)
             return order_id;
-        
+
         for (Friend friend : order.getFriends()) {
             createOrderFriend(order_id, friend.get_ID());
         }
@@ -272,7 +272,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // create order
     public int updateOrder(Order order) {
-        Log.d("DB", "order id "+order.get_ID());
         long res_id = order.getRestaurant().get_ID();
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -285,7 +284,6 @@ public class DBHandler extends SQLiteOpenHelper {
         // must drop Order_FRIEND first!!!
         dropOrderFriends(order.get_ID());
         for (Friend friend : order.getFriends()) {
-            Log.d("Friends id: ", String.valueOf(friend.get_ID()));
             createOrderFriend(order.get_ID(), friend.get_ID());
         }
 
@@ -314,8 +312,6 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
         db.close();
 
-        Log.d("getOrder()", String.valueOf(o.getFriends().size())+" friends found");
-
         return o;
     }
 
@@ -324,8 +320,6 @@ public class DBHandler extends SQLiteOpenHelper {
         String friendQuery = "SELECT * FROM " + TABLE_FRIENDS + " INNER JOIN "
                 + TABLE_ORDER_FRIENDS + " ON "+TABLE_FRIENDS +"."+ KEY_ID + " = "+TABLE_ORDER_FRIENDS+"."
                 + KEY_FRIEND_ID + " WHERE "+TABLE_ORDER_FRIENDS+"." + KEY_ORDER_ID + " = " + order_id;
-
-        Log.d("getFriOrdQuery", friendQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(friendQuery, null);
@@ -338,7 +332,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 f.setAddress(c.getString(c.getColumnIndex(KEY_ADDRESS)));
                 f.setPhone(c.getString(c.getColumnIndex(KEY_PH_NO)));
                 friends.add(f);
-               // Log.d("FriendsForOrder", "friend added!");
             } while (c.moveToNext());
         }
         c.close();
@@ -401,7 +394,6 @@ public class DBHandler extends SQLiteOpenHelper {
         int deleted_rows = db.delete(TABLE_ORDER_FRIENDS, KEY_ORDER_ID + " = ?",
                 new String[] { String.valueOf(order_id) });
 
-        Log.d("DELETE", String.valueOf(deleted_rows)+" rows deleted");
         return deleted_rows;
     }
 

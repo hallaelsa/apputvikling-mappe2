@@ -60,9 +60,6 @@ public class MainActivity extends AppCompatActivity {
         fabRestaurantLabel = findViewById(R.id.fabRestaurantLabel);
         fabOrderLabel = findViewById(R.id.fabOrderLabel);
         frameLayout = findViewById(R.id.frameLayout);
-
-
-
     }
 
     @Override
@@ -222,5 +219,9 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Log.d("preferences", String.valueOf(sharedPreferences.getBoolean("SMScheckbox", false)));
         Log.d("preferences", sharedPreferences.getString("setUsername", ""));
+        String name = sharedPreferences.getString("setUsername", "");
+
+        String message = getString(R.string.defaultMessageBase)+" restaurant name\n"+getString(R.string.signMessageBase)+" "+name;
+        Log.d("Message", message);
     }
 }

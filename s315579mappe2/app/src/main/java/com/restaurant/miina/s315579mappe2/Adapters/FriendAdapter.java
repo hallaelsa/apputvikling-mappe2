@@ -48,7 +48,6 @@ public class FriendAdapter extends CustomAdapter {
                 for(Friend forupdate: friendsForUpdate) {
                     if(forupdate.get_ID() == friends.get(position).get_ID()) {
                         holder.checkBox.setChecked(true);
-                        Log.d("Adapter", "friendID: "+String.valueOf(friends.get(position).get_ID()));
                     }
                 }
             }

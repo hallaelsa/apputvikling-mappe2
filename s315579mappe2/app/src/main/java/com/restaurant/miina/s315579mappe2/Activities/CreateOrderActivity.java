@@ -1,6 +1,8 @@
 package com.restaurant.miina.s315579mappe2.Activities;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -18,9 +20,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.restaurant.miina.s315579mappe2.Adapters.RestaurantAdapter;
 import com.restaurant.miina.s315579mappe2.Fragments.CustomFragment;
 import com.restaurant.miina.s315579mappe2.DBHandler;
 import com.restaurant.miina.s315579mappe2.Fragments.FriendFragment;
+import com.restaurant.miina.s315579mappe2.Fragments.RestaurantFragment;
 import com.restaurant.miina.s315579mappe2.Models.Friend;
 import com.restaurant.miina.s315579mappe2.Models.Order;
 import com.restaurant.miina.s315579mappe2.R;
@@ -33,15 +37,12 @@ import java.util.List;
 public class CreateOrderActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatePickerDialog.OnDateSetListener {
     TextView selectedDate;
     ActionBar actionbar;
-    Button updateBtn;
     Button deleteBtn;
     Button addBtn;
     Spinner restaurantSpinner;
     List<Friend> friendList;
     List<Restaurant> restaurantList;
     String date;
-    String[] restaurantNames;
-    long[] restaurantIDs;
     long chosenRestaurantID;
     DBHandler db;
     DatePickerDialog datePickerDialog;
@@ -65,17 +66,12 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
         selectedDate = findViewById(R.id.selectedDate);
         deleteBtn = findViewById(R.id.deleteBtn);
         addBtn = findViewById(R.id.addBtn);
-        updateBtn = findViewById(R.id.updateBtn);
 
-        if(isUpdate) {
-            addBtn.setVisibility(View.GONE);
-        } else {
+        if(!isUpdate) {
             deleteBtn.setVisibility(View.GONE);
-            updateBtn.setVisibility(View.GONE);
         }
 
         fixToolbar();
-        setArrays();
         setRestaurantSpinner();
         setFriendFragment();
         setCalendar();
@@ -83,20 +79,9 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void setValues(long id) {
-        Log.d("Actvitity", "order id "+id);
         orderForUpdate = db.getOrder(id);
         Restaurant res = orderForUpdate.getRestaurant();
         date = orderForUpdate.getDate();
-        int index = 0;
-        long resId = res.get_ID();
-        for (int i = 0; i < restaurantIDs.length; i++) {
-            if(restaurantIDs[i] == resId) {
-                index = i;
-                break;
-            }
-        }
-
-        restaurantSpinner.setSelection(index);
         selectedDate.setText(date);
         List<Friend> friends = orderForUpdate.getFriends();
         if(friends.size() > 0) {
@@ -135,16 +120,14 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
         restaurantSpinner = (Spinner) findViewById(R.id.restaurantSpinner);
         restaurantSpinner.setOnItemSelectedListener(this);
 
-        ArrayAdapter<CharSequence> restaurantAdapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, restaurantNames);
-        restaurantAdapter.setDropDownViewResource(R.layout.dropdown_item);
-        restaurantSpinner.setAdapter(restaurantAdapter);
+        RestaurantAdapter restaurantAdapter1 = new RestaurantAdapter(this, restaurantList, RestaurantFragment.DEFAULT_LIST_FLAG);
+        restaurantSpinner.setAdapter(restaurantAdapter1);
     }
 
     private void setCalendar() {
         Calendar calendar = Calendar.getInstance();
         datePickerDialog = new DatePickerDialog(
-                this, CreateOrderActivity.this,calendar.get(Calendar.YEAR),
+                this, CreateOrderActivity.this, calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),  calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
@@ -157,23 +140,13 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
                 });
     }
 
-    private void setArrays() {
-        restaurantIDs = new long[restaurantList.size()];
-        restaurantNames = new String[restaurantList.size()];
-
-        for(int i = 0 ; i < restaurantList.size(); i++) {
-            restaurantNames[i] = restaurantList.get(i).getName();
-            restaurantIDs[i] = restaurantList.get(i).get_ID();
-        }
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        chosenRestaurantID = restaurantIDs[position];
+        chosenRestaurantID = restaurantList.get(position).get_ID();
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
-        chosenRestaurantID = restaurantIDs[0];
+        chosenRestaurantID = restaurantList.get(0).get_ID();
     }
 
     @Override
@@ -190,7 +163,13 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
         }
 
         Restaurant restaurant = db.getRestaurant(chosenRestaurantID);
-        Order order = new Order(restaurant, date);
+        Order order;
+
+        if(isUpdate) {
+            order = orderForUpdate;
+        } else {
+            order = new Order(restaurant, date);
+        }
 
         if(fragment.getCheckedIds().size() > 0) {
             List<Friend> friends = new ArrayList<>();
@@ -204,37 +183,43 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
             order.setFriends(friends);
         }
 
-        db.createOrder(order);
-        setResult(RESULT_OK);
-        finish();
-
-    }
-
-    public void updateOrder(View view) {
-        Restaurant restaurant = db.getRestaurant(chosenRestaurantID);
-        Order order = orderForUpdate;
-
-        if(fragment.getCheckedIds().size() > 0) {
-            List<Friend> friends = new ArrayList<>();
-            List<Long> chosenFriendIDs = fragment.getCheckedIds();
-
-            for(long friendID : chosenFriendIDs) {
-                friends.add(db.getFriend(friendID));
+        if(isUpdate) {
+            if(updateID == 999999999) {
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                return;
             }
-
-            order.setFriends(friends);
+            db.updateOrder(orderForUpdate);
+        } else {
+            db.createOrder(order);
         }
 
-        db.updateOrder(orderForUpdate);
         setResult(RESULT_OK);
         finish();
 
     }
 
     public void deleteOrder(View view) {
-        db.deleteOrder(orderForUpdate.get_ID());
-        setResult(RESULT_OK);
-        finish();
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(this.getResources().getString(R.string.deleteDialogTitle))
+                .setMessage(this.getResources().getString(R.string.deleteDialogText))
+                .setPositiveButton(this.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        db.deleteOrder(orderForUpdate.get_ID());
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton(this.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                })
+                .setCancelable(false)
+                .show();
+
+
     }
 
     @Override

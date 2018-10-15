@@ -14,7 +14,29 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <Button
+            android:id="@+id/addBtn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="right"
+            android:onClick="addOrder"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_check_white_24dp"
+            android:padding="16dp" />
+
+        <Button
+            android:id="@+id/deleteBtn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="right"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_delete_forever_white_24dp"
+            android:onClick="deleteOrder"
+            android:padding="16dp" />
+
+    </android.support.v7.widget.Toolbar>
 
     <TextView
         android:layout_width="match_parent"
@@ -32,7 +54,7 @@
         android:id="@+id/restaurantSpinner"
         style="@style/Widget.AppCompat.Spinner.Underlined"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:textSize="20sp" />
@@ -73,22 +95,22 @@
     <FrameLayout
         android:id="@+id/selectFriendsFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:layout_margin="8dp"></FrameLayout>
+        android:layout_height="311dp"
+        android:layout_margin="8dp"
+        android:layout_weight="1"></FrameLayout>
 
-    <Button
-        android:id="@+id/addBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/colorAccent"
-        android:onClick="addOrder"
-        android:text="@string/CreateOrderBtn"
-        android:textColor="@color/colorLight" />
+    <!--<Button-->
+        <!--android:id="@+id/addBtn"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:background="@color/colorAccent"-->
+        <!--android:onClick="addOrder"-->
+        <!--android:text="@string/CreateOrderBtn"-->
+        <!--android:textColor="@color/colorLight" />-->
 
     <TableRow
         android:layout_width="match_parent"
@@ -96,27 +118,16 @@
         android:layout_gravity="bottom"
         android:gravity="top|center">
 
-        <Button
-            android:id="@+id/updateBtn"
-            android:layout_width="172dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/colorAccent"
-            android:onClick="updateOrder"
-            android:text="@string/updateBtnLabel"
-            android:textColor="@color/colorLight" />
-
-        <Button
-            android:id="@+id/deleteBtn"
-            android:layout_width="162dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/complimentary"
-            android:onClick="deleteOrder"
-            android:text="@string/deleteBtnLabel"
-            android:textColor="@color/colorLight" />
+        <!--<Button-->
+            <!--android:id="@+id/deleteBtn"-->
+            <!--android:layout_width="162dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:background="@color/complimentary"-->
+            <!--android:onClick="deleteOrder"-->
+            <!--android:text="@string/deleteBtnLabel"-->
+            <!--android:textColor="@color/colorLight" />-->
     </TableRow>
 
 </LinearLayout>

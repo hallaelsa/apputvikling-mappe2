@@ -11,4 +11,24 @@
         android:title="@string/setSMScheckboxTitle"
         android:summary="@string/setSMSsummary"/>
 
+    <EditTextPreference
+        android:key="setSMSmessage"
+        android:title="@string/setMessageTitle"
+        android:summary="@string/setMessageSummary"/>
+
+    <ListPreference
+        android:key="setHour"
+        android:title="@string/setHourText"
+        android:summary="@string/setHourSummary"
+        android:entries="@array/hours"
+        android:entryValues="@array/hours"/>
+
+    <ListPreference
+        android:key="setMinute"
+        android:title="@string/setMinuteText"
+        android:summary="@string/setMinuteSummary"
+        android:entries="@array/minutes"
+        android:entryValues="@array/minutes"/>
+
+
 </PreferenceScreen>

@@ -62,8 +62,6 @@ public class Order {
         String string = new String();
         string+=restaurant.getName()+" address: "+restaurant.getAddress()+" date: "+date;
 
-        Log.d("NumOfFriends", String.valueOf(friends.size()));
-
         for(Friend friend : friends) {
             string+=" name: "+friend.getName();
         }
