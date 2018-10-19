@@ -1,7 +1,10 @@
 package com.restaurant.miina.s315579mappe2.Activities;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -22,8 +25,10 @@ import android.widget.TextView;
 import com.restaurant.miina.s315579mappe2.Fragments.CustomFragment;
 import com.restaurant.miina.s315579mappe2.Fragments.FriendFragment;
 import com.restaurant.miina.s315579mappe2.Fragments.OrderFragment;
+import com.restaurant.miina.s315579mappe2.NotificationService;
 import com.restaurant.miina.s315579mappe2.R;
 import com.restaurant.miina.s315579mappe2.Fragments.RestaurantFragment;
+import com.restaurant.miina.s315579mappe2.Util;
 
 public class MainActivity extends AppCompatActivity {
     FloatingActionButton fabPlus;
@@ -46,20 +51,36 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar =
-                (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         actionbar = getSupportActionBar();
-        fabPlus = (FloatingActionButton)findViewById(R.id.fabPlus);
-        fabFriend = (FloatingActionButton)findViewById(R.id.fabFriend);
-        fabOrder = (FloatingActionButton)findViewById(R.id.fabOrder);
-        fabRestaurant = (FloatingActionButton)findViewById(R.id.fabRestaurant);
-        fabMinus = (FloatingActionButton)findViewById(R.id.fabMinus);
+        fabPlus = findViewById(R.id.fabPlus);
+        fabFriend = findViewById(R.id.fabFriend);
+        fabOrder = findViewById(R.id.fabOrder);
+        fabRestaurant = findViewById(R.id.fabRestaurant);
+        fabMinus = findViewById(R.id.fabMinus);
         fabFriendLabel = findViewById(R.id.fabFriendLabel);
         fabRestaurantLabel = findViewById(R.id.fabRestaurantLabel);
         fabOrderLabel = findViewById(R.id.fabOrderLabel);
         frameLayout = findViewById(R.id.frameLayout);
+
+        createNotificationChannel();
+        Util.scheduleJob(this);
+    }
+
+    private void createNotificationChannel() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(NotificationService.CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
     }
 
     @Override

@@ -20,8 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
                 PrefsFragment()).commit();
 
 
-        Toolbar toolbar =
-                (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
