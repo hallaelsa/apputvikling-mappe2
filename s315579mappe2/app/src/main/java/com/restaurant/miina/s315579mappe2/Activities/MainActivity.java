@@ -1,5 +1,6 @@
 package com.restaurant.miina.s315579mappe2.Activities;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -22,13 +24,21 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.restaurant.miina.s315579mappe2.Adapters.RestaurantAdapter;
+import com.restaurant.miina.s315579mappe2.DBHandler;
 import com.restaurant.miina.s315579mappe2.Fragments.CustomFragment;
 import com.restaurant.miina.s315579mappe2.Fragments.FriendFragment;
 import com.restaurant.miina.s315579mappe2.Fragments.OrderFragment;
+import com.restaurant.miina.s315579mappe2.Models.Order;
+import com.restaurant.miina.s315579mappe2.Models.Restaurant;
 import com.restaurant.miina.s315579mappe2.NotificationService;
 import com.restaurant.miina.s315579mappe2.R;
 import com.restaurant.miina.s315579mappe2.Fragments.RestaurantFragment;
-import com.restaurant.miina.s315579mappe2.Util;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     FloatingActionButton fabPlus;
@@ -65,22 +75,13 @@ public class MainActivity extends AppCompatActivity {
         fabOrderLabel = findViewById(R.id.fabOrderLabel);
         frameLayout = findViewById(R.id.frameLayout);
 
-        createNotificationChannel();
-        Util.scheduleJob(this);
-    }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragment = new OrderFragment();
+        fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
+        actionbar.setTitle(R.string.ordersMenuText);
 
-    private void createNotificationChannel() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(NotificationService.CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
+        showPermissionDialog();
     }
 
     @Override
@@ -114,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new OrderFragment();
                 fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
                 actionbar.setTitle(R.string.ordersMenuText);
-                actionbar.setDisplayHomeAsUpEnabled(true);
                 break;
             case R.id.settingsmenu:
                 Intent i = new Intent(this, SettingsActivity.class);
@@ -122,9 +122,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case android.R.id.home:
-                fragmentManager.beginTransaction().remove(fragment).commit();
-                actionbar.setTitle(R.string.app_name);
-                actionbar.setDisplayHomeAsUpEnabled(false);
+                fragment = new OrderFragment();
+                fragmentTransaction.replace(R.id.frameLayout, fragment).commit();
+                actionbar.setTitle(R.string.ordersMenuText);
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -233,16 +234,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.d("preferences", String.valueOf(sharedPreferences.getBoolean("SMScheckbox", false)));
-        Log.d("preferences", sharedPreferences.getString("setUsername", ""));
-        String name = sharedPreferences.getString("setUsername", "");
-
-        String message = getString(R.string.defaultMessageBase)+" restaurant name\n"+getString(R.string.signMessageBase)+" "+name;
-        Log.d("Message", message);
+    private void showPermissionDialog() {
+        if (!NotificationService.checkPermission(this)) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.SEND_SMS},
+                    ActivityCompat.checkSelfPermission(this,
+                            Manifest.permission.SEND_SMS));
+        }
     }
+    
 }

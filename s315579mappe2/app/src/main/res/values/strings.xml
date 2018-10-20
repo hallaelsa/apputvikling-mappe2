@@ -33,19 +33,19 @@
     <string name="CreateOrderBtn">Add</string>
     <string name="OrderUpdateHeader">Update Order</string>
     <string name="setMessageTitle">Edit default SMS</string>
-    <string name="defaultMessageBase">You have a dinner coming up at </string>
+    <string name="defaultMessageBase">You have a dinner coming up. </string>
     <string name="signMessageBase">Best regards </string>
     <string name="setMessageSummary">Here you can edit the default message sent to your friends</string>
     <string name="setHourText">Set hour</string>
     <string name="setMinuteText">Set minutes</string>
-    <string name="setHourSummary">Set the hour you want the SMS notification to be sent</string>
-    <string name="setMinuteSummary">Set the minute over hour you want the SMS notification to be sent</string>
+    <string name="setHourSummary">Set the hour you want the SMS notification to be sent, if nohing is choosen hour will be 12</string>
+    <string name="setMinuteSummary">Set the minute over hour you want the SMS notification to be sent, if nothing is chosen minute will be 00</string>
     <string name="yes">Yes</string>
     <string name="deleteDialogText">Are you sure you want to delete this entry?</string>
     <string name="no">No</string>
     <string name="deleteDialogTitle">Delete</string>
-    <string name="notificationTitle">You have a dinner coming up!</string>
-    <string name="notificationText">You have a dinner today!</string>
+    <string name="notificationTitle">Dinner alert!</string>
+    <string name="notificationText">You have a dinner today</string>
     <string name="channel_name">RestaurantAPP notification channel</string>
     <string name="channel_description">This channel enables notifications for the restaurant app</string>
 </resources>

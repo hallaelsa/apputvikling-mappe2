@@ -7,6 +7,7 @@ import java.util.List;
 public class Order {
     long _ID;
     String date; // Date funker ikke i SQLite: https://stackoverflow.com/questions/16739836/how-to-add-date-in-sqlite-database
+    String time;
     Restaurant restaurant;
     List<Friend> friends;  // obs. valgfri!
 
@@ -14,15 +15,17 @@ public class Order {
 
     }
 
-    public Order(long _ID, Restaurant restaurant, String date) {
+    public Order(long _ID, Restaurant restaurant, String date, String time) {
     this._ID = _ID;
     this.restaurant = restaurant;
     this.date = date;
+    this.time = time;
     }
 
-    public Order(Restaurant restaurant, String date) {
+    public Order(Restaurant restaurant, String date, String time) {
         this.restaurant = restaurant;
         this.date = date;
+        this.time = time;
     }
 
     public long get_ID() {
@@ -35,6 +38,10 @@ public class Order {
 
     public String getDate() {
         return date;
+    }
+
+    public String getTime() {
+        return time;
     }
 
     public List<Friend> getFriends() {
@@ -53,20 +60,12 @@ public class Order {
         this.date = date;
     }
 
-    public void setFriends(List<Friend> friends) {
-        this.friends = friends;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    @Override
-    public String toString() {
-        String string = new String();
-        string+=restaurant.getName()+" address: "+restaurant.getAddress()+" date: "+date;
-
-        for(Friend friend : friends) {
-            string+=" name: "+friend.getName();
-        }
-
-        return string;
+    public void setFriends(List<Friend> friends) {
+        this.friends = friends;
     }
 
 }

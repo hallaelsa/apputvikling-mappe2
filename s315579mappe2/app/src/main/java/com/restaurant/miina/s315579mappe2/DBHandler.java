@@ -28,7 +28,8 @@ public class DBHandler extends SQLiteOpenHelper {
     static String KEY_ADDRESS = "Address";
     static String KEY_RES_TYPE = "Type";
     static String KEY_DATE = "Date";
-    static int DATABASE_VERSION = 1;
+    static String KEY_TIME = "Time";
+    static int DATABASE_VERSION = 2;
     static String DATABASE_NAME = "Restaurant_app";
 
     private static String CREATE_TABLE_RESTAURANTS = "CREATE TABLE " + TABLE_RESTAURANTS + "(" + KEY_ID +
@@ -42,6 +43,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static String CREATE_TABLE_ORDER = "CREATE TABLE " + TABLE_ORDER + "(" + KEY_ID +
             " INTEGER PRIMARY KEY," + KEY_RES_ID +
             " INTEGER," + KEY_DATE +
+            " DATETIME,"+ KEY_TIME +
             " DATETIME" +")";
 
     // koblingstabell mellom Order og Add_Friend_Activity
@@ -137,10 +139,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public Friend getFriend(long friend_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String orderQuery = "SELECT  * FROM " + TABLE_FRIENDS + " WHERE "
+        String friendQuery = "SELECT  * FROM " + TABLE_FRIENDS + " WHERE "
                 + KEY_ID + " = " + friend_id;
 
-        Cursor c = db.rawQuery(orderQuery, null);
+        Cursor c = db.rawQuery(friendQuery, null);
 
         if (c != null)
             c.moveToFirst();
@@ -227,9 +229,9 @@ public class DBHandler extends SQLiteOpenHelper {
     public Restaurant getRestaurant(long res_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String orderQuery = "SELECT  * FROM " + TABLE_RESTAURANTS + " WHERE "
+        String resQuery = "SELECT  * FROM " + TABLE_RESTAURANTS + " WHERE "
                 + KEY_ID + " = " + res_id;
-        Cursor c = db.rawQuery(orderQuery, null);
+        Cursor c = db.rawQuery(resQuery, null);
 
         if (c != null)
             c.moveToFirst();
@@ -255,6 +257,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_RES_ID, res_id);
         values.put(KEY_DATE, order.getDate());
+        values.put(KEY_TIME, order.getTime());
 
         long order_id = db.insert(TABLE_ORDER, null, values);
         db.close();
@@ -277,6 +280,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_RES_ID, res_id);
         values.put(KEY_DATE, order.getDate());
+        values.put(KEY_TIME, order.getTime());
 
         int updated_rows = db.update(TABLE_ORDER, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(order.get_ID()) });
@@ -307,6 +311,7 @@ public class DBHandler extends SQLiteOpenHelper {
         Order o = new Order();
         o.set_ID(c.getLong(c.getColumnIndex(KEY_ID)));
         o.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+        o.setTime(c.getString(c.getColumnIndex(KEY_TIME)));
         o.setRestaurant(getRestaurant(c.getLong(c.getColumnIndex(KEY_RES_ID))));
         o.setFriends(getFriendsForOrder(c.getLong(c.getColumnIndex(KEY_ID))));
         c.close();
@@ -353,6 +358,31 @@ public class DBHandler extends SQLiteOpenHelper {
                 Order o = new Order();
                 o.set_ID(c.getLong(c.getColumnIndex(KEY_ID)));
                 o.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+                o.setTime(c.getString(c.getColumnIndex(KEY_TIME)));
+                o.setRestaurant(getRestaurant(c.getLong(c.getColumnIndex(KEY_RES_ID))));
+                o.setFriends(getFriendsForOrder(c.getLong(c.getColumnIndex(KEY_ID))));
+                orders.add(o);
+            } while (c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return orders;
+    }
+
+    public List<Order> getAllOrders(String date) {
+        List<Order> orders = new ArrayList<Order>();
+        String selectQuery = "SELECT  * FROM " + TABLE_ORDER +" WHERE "+KEY_DATE +" = '"+date+"'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                Order o = new Order();
+                o.set_ID(c.getLong(c.getColumnIndex(KEY_ID)));
+                o.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+                o.setTime(c.getString(c.getColumnIndex(KEY_TIME)));
                 o.setRestaurant(getRestaurant(c.getLong(c.getColumnIndex(KEY_RES_ID))));
                 o.setFriends(getFriendsForOrder(c.getLong(c.getColumnIndex(KEY_ID))));
                 orders.add(o);

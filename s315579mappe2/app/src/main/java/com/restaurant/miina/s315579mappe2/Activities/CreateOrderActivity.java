@@ -2,6 +2,7 @@ package com.restaurant.miina.s315579mappe2.Activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.restaurant.miina.s315579mappe2.Adapters.RestaurantAdapter;
@@ -43,6 +45,7 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
     List<Friend> friendList;
     List<Restaurant> restaurantList;
     String date;
+    String time;
     long chosenRestaurantID;
     DBHandler db;
     DatePickerDialog datePickerDialog;
@@ -82,7 +85,8 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
         orderForUpdate = db.getOrder(id);
         Restaurant res = orderForUpdate.getRestaurant();
         date = orderForUpdate.getDate();
-        selectedDate.setText(date);
+        time = orderForUpdate.getTime();
+        selectedDate.setText(date+", at "+time);
         List<Friend> friends = orderForUpdate.getFriends();
         if(friends.size() > 0) {
             ((FriendFragment)fragment).setSelectedFriends(friends);
@@ -153,12 +157,31 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         month +=1;
         date = dayOfMonth+"."+month+"."+year;
-        selectedDate.setText(date);
+        displayTimepicker();
+    }
+
+    private void displayTimepicker() {
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                String minute = String.valueOf(selectedMinute);
+                if(minute.length() == 0) {
+                    minute = "0"+minute;
+                }
+                time = selectedHour+":"+minute;
+                selectedDate.setText(date+", at "+time);
+            }
+        }, hour, minute, true);
+        mTimePicker.show();
     }
 
     public void addOrder(View view) {
-        if(date == null) {
-            Toast.makeText(this, "Please select a date", Toast.LENGTH_SHORT).show();
+        if(date == null || time == null) {
+            Toast.makeText(this, "Please select a date and time", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -167,8 +190,11 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
 
         if(isUpdate) {
             order = orderForUpdate;
+            order.setDate(date);
+            order.setTime(time);
+            order.setRestaurant(restaurant);
         } else {
-            order = new Order(restaurant, date);
+            order = new Order(restaurant, date, time);
         }
 
         if(fragment.getCheckedIds().size() > 0) {

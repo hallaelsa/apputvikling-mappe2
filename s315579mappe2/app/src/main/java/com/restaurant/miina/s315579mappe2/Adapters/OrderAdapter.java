@@ -44,7 +44,7 @@ public class OrderAdapter extends CustomAdapter {
         holder.header.setText(orders.get(position).getRestaurant().getName());
         holder.arg1.setText(orders.get(position).getRestaurant().getAddress());
         holder.arg2.setText(getNumOfFruends(position)+" friends joining");
-        holder.arg3.setText(orders.get(position).getDate());
+        holder.arg3.setText(orders.get(position).getDate()+" "+orders.get(position).getTime());
     }
 
     @Override
